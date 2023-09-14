@@ -1,4 +1,4 @@
-name: "[ PROD ] Deploy AX-PoshTools to Command Storage"
+name: "Demo"
 
 on:
   workflow_dispatch:
