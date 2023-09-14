@@ -8,15 +8,18 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - name: "Set var 1"
+        id: step-1
         run: |
-          var1="somevalue"
+          echo "var1=\"somevalue\"" >> "$GITHUB_OUTPUT"
 
       - name: "Read var 1, set var 2"
+        id: step-2
         run: |
-          echo "var1: ${var1}"
-          var2="someothervalue"
+          echo "var1: ${{ steps.step-1.outputs.var1 }}"
+          echo "var2=\"someothervalue\"" >> "$GITHUB_OUTPUT"
 
       - name: "Read vars 1 and 2"
+        id: step-3
         run: |
-          echo "var1: ${var1}"
-          echo "var2: ${var2}"
+          echo "var1: ${{ steps.step-1.outputs.var1 }}"
+          echo "var2: ${{ steps.step-2.outputs.var2 }}"
