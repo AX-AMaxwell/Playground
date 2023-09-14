@@ -1,0 +1,22 @@
+name: "[ PROD ] Deploy AX-PoshTools to Command Storage"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  demo:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Set var 1"
+        run: |
+          var1="somevalue"
+
+      - name: "Read var 1, set var 2"
+        run: |
+          echo "var1: ${var1}"
+          var2="someothervalue"
+
+      - name: "Read vars 1 and 2"
+        run: |
+          echo "var1: ${var1}"
+          echo "var2: ${var2}"
