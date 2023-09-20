@@ -1,0 +1,42 @@
+---
+title: AX-PoshTools | Logging
+---
+# Logging
+
+## out
+### Summary
+Provides an alternative to the native "Write-*" cmdlets, allowing us to write directly to out and error streams, rather than the console host.
+### Parameters
+#### Message
+#### Type
+[ System.String ]
+#### Attributes
+Mandatory         : True
+ValueFromPipeline : True
+Position          : 0
+#### Description
+Message to write to the specified stream.
+#### Aliases
+- `Message`
+#### Example
+`-Message 'Test123'`
+### Example
+```
+# the out alias, using positional parameters
+PS> out 'one' 'two' 'three'
+one
+two
+three
+# the verbose alias, using pipeline input
+PS> 'one', 'two', 'three' | verbose
+VERBOSE: one
+VERBOSE: two
+VERBOSE: three
+```
+### Notes
+#### History
+ | Author | Date | Version | Release Notes |
+| - | -- | -- | - |
+| Anthony Maxwell | 08/24/2023 | 1.0.0 |  |
+| Anthony Maxwell | 09/06/2023 | 1.1.0 | - Initial release. |
+| Anthony Maxwell | 09/14/2023 | 1.1.1 | - Input type change from System.String[] to System.String <br/> - Removed erroneous output in InvocationName switch in process block <br/> - Message null check <br/> - Implemented AllowNull() and AllowEmptyString() parameter attributes for Message parameter |

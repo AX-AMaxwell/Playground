@@ -1,0 +1,252 @@
+---
+title: AX-PoshTools | Software
+---
+# Software
+
+## Get-Win32App
+### Summary
+Retrieves Win32 installed applications from either or both of the local machine and user scopes.
+### Parameters
+#### IncludeUsers
+#### Type
+[ System.Management.Automation.SwitchParameter ]
+#### Attributes
+Mandatory : False
+#### Description
+If provided, will attempt to load and capture installed applications from all user registry hives in addition to local machine installations.
+#### Aliases
+- `IncludeUsers`
+- `iu`
+#### Example
+`-IncludeUsers`
+#### UsersOnly
+#### Type
+[ System.Management.Automation.SwitchParameter ]
+#### Attributes
+Mandatory : False
+#### Description
+If provided, will attempt to load and return ONLY user registry hive stored installed Win32 applications.
+#### Aliases
+- `UsersOnly`
+- `uo`
+#### Example
+`-UsersOnly`
+### Outputs
+#### Type
+[ System.Management.Automation.PSObject ]
+#### Description
+A PSObject containing all pertinent registry key properties for application identification, version evaluation and removal.
+### Notes
+#### History
+ | Author | Date | Version | Release Notes |
+| - | -- | -- | - |
+| Anthony Maxwell | 09/11/2023 | 1.0.0 |  |
+## New-Win32App
+### Summary
+Creates a Win32 application object using the provided args. Primarily used internally by Get-Win32App.
+### Parameters
+#### Name
+#### Type
+[ System.String ]
+#### Attributes
+Mandatory : True
+Position  : 0
+#### Description
+The name of the application.
+#### Aliases
+- `Name`
+#### Example
+`-Name 'Google Chrome'`
+#### Scope
+#### Type
+[ System.Text ]
+#### Attributes
+Mandatory : True
+Position  : 1
+#### Description
+Scope of the application install.
+#### Options
+- `USER`
+- `MACHINE`
+#### Aliases
+- `Scope`
+#### Example
+`-Scope USER`
+#### Username
+#### Type
+[ System.String ]
+#### Attributes
+Mandatory : False
+#### Description
+If the Scope provided is `USER`, this property defines the user associated with the install.
+#### Aliases
+- `Username`
+#### Example
+`-Username 'JSmith'`
+#### Version
+#### Type
+[ System.Version ]
+#### Attributes
+Mandatory : False
+#### Description
+The semantic version relative to the application.
+#### Aliases
+- `Version`
+#### Example
+`-Version ( [ System.Version ] '3.1.1' )`
+#### Publisher
+#### Type
+[ System.String ]
+#### Attributes
+Mandatory : False
+#### Description
+The application publisher.
+#### Aliases
+- `Publisher`
+#### Example
+`-Publisher 'Microsoft, Inc.'`
+#### InstallDate
+#### Type
+[ System.DateTime ]
+#### Attributes
+Mandatory : False
+#### Description
+The date the application was installed.
+#### Aliases
+- `InstallDate`
+#### Example
+`-InstallDate ( [ System.DateTime ] '01/01/2001' )`
+#### InstallLocation
+#### Type
+[ System.String ]
+#### Attributes
+Mandatory : False
+#### Description
+The file path to the application install.
+#### Aliases
+- `InstallLocation`
+#### Example
+`-InstallLocation 'C:\Program Files\Google\Chrome'`
+#### UninstallArgs
+#### Type
+[ System.Collections.Hashtable ]
+#### Attributes
+Mandatory : False
+#### Description
+A `Hashtable` containing file path and optional arguments required to perform an uninstall of the application.
+NOTE: This argument is required to utilize the resultant object's `Uninstall` method.
+#### Aliases
+- `UninstallArgs`
+#### Example
+```
+-UninstallArgs @{
+FilePath = 'C:\Program Files\Google\Chrome\Uninst.exe'
+ArgumentList = ''
+}
+```
+#### QuietUninstallArgs
+#### Type
+[ System.Collections.Hashtable ]
+#### Attributes
+Mandatory : False
+#### Description
+A `Hashtable` containing file path and optional arguments required to perform a silent uninstall of the application.
+NOTE: This argument is required to utilize the resultant object's `QuietUninstall` method.
+#### Aliases
+- `QuietUninstallArgs`
+#### Example
+```
+-QuietUninstallArgs @{
+FilePath = 'C:\Program Files\Google\Chrome\Uninst.exe'
+ArgumentList = '/silent', '/norestart'
+}
+```
+#### IsMSI
+#### Type
+[ System.Boolean ]
+#### Attributes
+Mandatory : False
+#### Description
+Defines whether the application is installed or removed via an MSI package.
+#### Aliases
+- `IsMSI`
+#### Example
+`-IsMSI $true`
+#### VarArgs
+#### Type
+[ System.Object[] ]
+#### Attributes
+Mandatory                   : False
+ValueFromRemainingArguments : True
+#### Description
+Allows creation of additional properties on the returned object by providing additional, unbound arguments in tuples. The tuples should be provided in the form of `( VarName, VarValue )`.
+#### Aliases
+- `VarArgs`
+#### Example
+`Get-Win32App -Name 'Test' -Scope 'Machine' ( 'Timestamp', ( Get-Date ).ToString() )`
+### Outputs
+#### Type
+[ System.Management.Automation.PSObject ]
+#### Description
+A PSObject containing all provided arguments and methods for application Uninstall and QuietUninstall.
+### Notes
+#### History
+ | Author | Date | Version | Release Notes |
+| - | -- | -- | - |
+| Anthony Maxwell | 09/11/2023 | 1.0.0 |  |
+| Anthony Maxwell | 09/14/2023 | 1.0.1 | - Initial Release. |
+## Remove-Win32App
+### Summary
+Performs an uninstall of the provided application.
+### Parameters
+#### Application
+#### Type
+[ System.Management.Automation.PSObject ]
+#### Attributes
+Mandatory         : True
+ValueFromPipeline : True
+Position          : 0
+#### Description
+The Win32App PSObject, as returned by `Get-Win32App` and `New-Win32App`, to be uninstalled.
+#### Aliases
+- `-Application`
+- `-app`
+#### Example
+`Get-Win32App | Where-Object { $_.Name -match 'Google Chrome' } | Remove-Win32App`
+#### Interactive
+#### Type
+[ System.Management.Automation.SwitchParameter ]
+#### Attributes
+Mandatory : False
+Position  : 1
+#### Description
+If specified, performs an interactive uninstall of the provided application(s).
+#### Aliases
+- `-Interactive`
+- `-i`
+#### Example
+`-Interactive`
+#### AdditionalArgs
+#### Type
+[ System.Object[] ]
+#### Attributes
+Mandatory : False
+Position  : 2
+#### Description
+Additional command-line arguments to be passed to the uninstaller.
+#### Aliases
+- `-AdditionalArgs`
+- `-aa`
+#### Example
+`-AdditionalArgs '/silent', '/norestart'`
+### Outputs
+#### Type
+[ System.Management.Automation.PSObject ]
+#### Description
+A PSObject containing the uninstaller exit code, provided file path and uninstall args used.
+### Notes
+#### History
+ | Author | Date | Version | Release Notes |
+| - | -- | -- | - |
+| Anthony Maxwell | 09/11/2023 | 1.0.0 |  |
+| Anthony Maxwell | 09/14/2023 | 1.0.1 | - Initial Release. |
