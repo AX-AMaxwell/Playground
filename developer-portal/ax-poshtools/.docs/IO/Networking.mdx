@@ -1,0 +1,70 @@
+---
+title: AX-PoshTools | Networking
+---
+# Networking
+
+## Get-IPv4Network
+### Summary
+Converts a provided network ID and CIDR prefix to an object containing the calculated network ID, broadcast address, number of IPs in the subnet and an enumerator.
+### Parameters
+#### Network
+#### Type
+[ System.String ]
+#### Attributes
+Mandatory         : True
+ParameterSetName  : `CIDR-String`
+Position          : 0
+ValueFromPipeline : True
+#### Description
+The IPV4 network as a string in CIDR notation.
+#### Aliases
+- `Network`
+#### Example
+`-Network '192.168.255.0/24'`
+#### NetworkID
+#### Type
+[ System.String ]
+#### Attributes
+Mandatory         : True
+ParameterSetName  : `ID-Prefix`
+Position          : 0
+#### Description
+The ID of the network subnet.
+#### Aliases
+- `NetworkID`
+#### Example
+'192.168.255.0'
+#### PrefixLength
+#### Type
+[ System.Int32 ]
+#### Attributes
+Mandatory         : True
+ParameterSetName  : `ID-Prefix`
+Position          : 1
+#### Description
+The integer representation of the network CIDR prefix length.
+#### Aliases
+- `PrefixLength`
+#### Example
+24 # indicates a /24 subnet
+### Example
+```
+PS> $net = Get-IPv4Network -Network '192.168.1.23/24'
+PS> $net.ID
+192.168.1.0
+PS> $net.Broadcast
+192.168.1.255
+PS> $net.Count
+256
+PS> $net | Foreach-Object { Write-Host $_ }
+192.168.1.1
+192.168.1.2
+...
+192.168.1.254
+```
+### Notes
+#### History
+ | Author | Date | Version | Release Notes |
+| - | -- | -- | - |
+| Anthony Maxwell | 07/17/2023 | 1.0.0 |  |
+| Anthony Maxwell | 09/01/2023 | 1.1.0 | - Initial release. |
